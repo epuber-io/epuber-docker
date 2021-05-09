@@ -1,10 +1,13 @@
-FROM ruby:2.5-alpine
+FROM ruby:2.7-alpine
 LABEL maintainer="roman@kriz.io"
 
-ENV EPUBER_VERSION="0.5.7"
+ENV EPUBER_VERSION="0.6.0"
 
-RUN apk --no-cache add imagemagick6 nodejs zip && \
-    apk --no-cache add --virtual .build-deps g++ musl-dev make imagemagick6-dev && \
+# Install Epuber and all dependencies
+RUN apk --no-cache --update add imagemagick nodejs zip && \
+    apk --no-cache add --virtual .build-deps g++ musl-dev make imagemagick-dev && \
     gem update --system && \
+    gem update --default && \
+    gem update && \
     gem install epuber --version $EPUBER_VERSION && \
     apk del .build-deps
